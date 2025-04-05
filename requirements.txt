@@ -1,7 +1,8 @@
 # This file is used to install the required packages for the project. Feel free to modify it as needed. You are free to add or remove packages.
 # The packages listed here will be installed using pip when you run the command `pip install -r requirements.txt`
 unstructured[pdf,ppt]
-pdfplumber
 langchain
 chromadb
 requests
+tenacity
+langchain-community
