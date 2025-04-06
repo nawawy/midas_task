@@ -56,6 +56,7 @@ git clone https://github.com/nawawy/midas_task.git
 
 ```bash
 
+cd midas_task
 python3 -m venv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
 
@@ -70,6 +71,7 @@ If you prefer to run the application in a Docker container, follow these steps:
 
 Build the Docker image:
 ```bash
+cd midas_task
 docker build -t midas_task .
 ```
 Run the Docker container:
