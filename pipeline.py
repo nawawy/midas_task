@@ -26,6 +26,13 @@ from langchain.vectorstores import Chroma
 import json
 import uuid
 from collections import defaultdict
+import shutil
+shutil.rmtree("chroma_db", ignore_errors=True)
+
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger_eng')
 
 # Helper function to download files from URLs and save them to a specified directory
 @retry(stop=stop_after_attempt(5), wait=wait_fixed(2))  # Retry 5 times with 2 seconds wait
@@ -103,7 +110,6 @@ def parse_ppt(file_path, url_source=None, pptx=False):
 # Helper function to clean text by removing extra spaces and newlines
 def clean_text(text):
     # Normalize multiple newlines and spaces
-    text = re.sub(r'\n+', '\n', text)
     text = re.sub(r'\s{2,}', ' ', text)
     text = text.strip()
     return text
@@ -115,7 +121,7 @@ def mark_sections(text):
     return text
 
 # Helper function to chunk text into smaller segments
-def chunk_text(text, chunk_size=1000, overlap=150):
+def chunk_text(text, chunk_size=1000, overlap=100):
     splitter = NLTKTextSplitter(chunk_size=chunk_size, chunk_overlap=overlap, separator="\n\n")
     clean_text_out = mark_sections(text)
     clean_text_out = clean_text(clean_text_out)
@@ -180,7 +186,6 @@ def process_file(file_path, url_source=None):
         print(f"Unsupported file type: {ext}")
         return None
     
-    # Implement file type detection and pre-processing
 
     return extracted_data
     
@@ -237,6 +242,7 @@ def main():
     
     # Save final chunks to a database or file system (output)
     documents = [Document(page_content=chunk['content'], metadata=chunk['metadata']) for chunk in chunks]
+    
     # Initialize embeddings 
     embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")  # or OpenAIEmbeddings()
 
