@@ -31,6 +31,7 @@ import json
 import uuid
 from collections import defaultdict
 import shutil
+import hashlib
 
 import nltk
 
@@ -45,6 +46,9 @@ set_debug(False)
 
 # Remove existing ChromaDB directory if it exists
 shutil.rmtree("chroma_db", ignore_errors=True)
+
+# Set the cache file name
+CACHE_FILE = "processed_files.json"
 
 # Helper function to download files from URLs and save them to a specified directory
 @retry(stop=stop_after_attempt(5), wait=wait_fixed(2))  # Retry 5 times with 2 seconds wait
@@ -142,18 +146,48 @@ def detect_table_pattern(text):
         return num_tabular_lines / len(lines) > 0.5
     return False
 
+# Helper function to load cache from a JSON file
+def load_cache():
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+# Helper fuction to hash URLs
+def hash_url(url):
+    return hashlib.md5(url.encode()).hexdigest()
+
+# Helper function to save cache to a JSON file
+def save_cache(cache):
+    with open(CACHE_FILE, "w") as f:
+        json.dump(cache, f, indent=2)
+
 def fetch_documents(urls):
     files = []
+    cache = load_cache()
 
     # Implement HTTP client with retry logic
     for url in urls:
         try:
+            # Generate a hash for the URL to use as a cache key
+            url_hash = hash_url(url)
+            if url_hash in cache:
+                print(f"Skipping already processed file: {url}")
+                continue
             file_path = download_file(url)
         except RetryError:
             print("Failed to download the file after several attempts.")
         
         if file_path:
+            cache[url_hash] = {
+                "url": url,
+                "file_path": file_path,
+                "parsed": False
+            }
             files.append((file_path, url))
+
+    # Save the cache after processing all URLs
+    save_cache(cache)
 
     return files
 
@@ -183,9 +217,27 @@ def get_doc_type(file_path):
     
     return doc_type
 
-def process_file(file_path, url_source=None):
+def process_file(file_path, url_source):
+    
+    url_hash = hash_url(url_source)
+    cache = load_cache()
+    
+    # Check if the file is already parsed
+    for entry in cache.values():
+        if entry.get("file_hash") == url_hash and entry.get("parsed", False):
+            print(f"Skipping already parsed file: {file_path}")
+            return None
+        
     doc_type = get_doc_type(file_path)
     extracted_data = parse_data(file_path, url_source, type_file=doc_type)
+
+    cache[url_hash] = {
+        "url": url_source,
+        "file_path": file_path,
+        "parsed": True
+    }
+
+    save_cache(cache)
     return extracted_data
     
 def chunk_data(elements):
@@ -233,7 +285,7 @@ def main(args=None):
     if not urls:
         print("No URLs provided. Please provide URLs as command line arguments.")
         return
-
+    
     # Fetch and download documents
     raw_files = fetch_documents(urls)
 
@@ -242,6 +294,10 @@ def main(args=None):
 
     # Chunk the processed data
     chunks = chunk_data(processed_data)
+
+    if chunks is None or not chunks:
+        print("No data to process.")
+        return
     
     # Write data to a JSONL file
     out_json_file = "output/" + str(uuid.uuid4()) + ".jsonl"
