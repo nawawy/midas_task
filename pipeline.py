@@ -223,10 +223,9 @@ def process_file(file_path, url_source):
     cache = load_cache()
     
     # Check if the file is already parsed
-    for entry in cache.values():
-        if entry.get("file_hash") == url_hash and entry.get("parsed", False):
-            print(f"Skipping already parsed file: {file_path}")
-            return None
+    if cache.get(url_hash, {}).get("parsed"):
+        print(f"Skipping already parsed file from URL: {url_source}")
+        return None
         
     doc_type = get_doc_type(file_path)
     extracted_data = parse_data(file_path, url_source, type_file=doc_type)

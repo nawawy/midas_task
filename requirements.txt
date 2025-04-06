@@ -10,3 +10,4 @@ sentence_transformers
 accelerate
 langchain_huggingface
 langchain_chroma
+pytest
