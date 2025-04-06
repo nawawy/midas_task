@@ -12,6 +12,7 @@ CATEGORIES = {
 import os
 import requests
 import re
+import sys
 from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
 
 from unstructured.partition.pdf import partition_pdf
@@ -20,19 +21,30 @@ from unstructured.partition.pptx import partition_pptx
 
 from langchain.text_splitter import NLTKTextSplitter
 from langchain.schema import Document
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from langchain_core.globals import set_verbose, set_debug
+
 
 import json
 import uuid
 from collections import defaultdict
 import shutil
-shutil.rmtree("chroma_db", ignore_errors=True)
 
 import nltk
+
+# Download necessary NLTK data files
 nltk.download('punkt')
 nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger_eng')
+
+# Set up logging and verbosity
+set_verbose(False)
+set_debug(False)
+
+# Remove existing ChromaDB directory if it exists
+shutil.rmtree("chroma_db", ignore_errors=True)
 
 # Helper function to download files from URLs and save them to a specified directory
 @retry(stop=stop_after_attempt(5), wait=wait_fixed(2))  # Retry 5 times with 2 seconds wait
@@ -58,11 +70,20 @@ def download_file(url, save_dir="downloads"):
         return None
 
 # Helper function to extract text from PDF files
-def parse_pdf(file_path, url_source=None):
+def parse_data(file_path, url_source=None, type_file=None):
     text_data = []
     
-    elements = partition_pdf(filename=file_path)
+    if type_file == "pptx":
+        elements = partition_pptx(filename=file_path)
+    elif type_file == "ppt":
+        elements = partition_ppt(filename=file_path)
+    elif type_file == "pdf":
+        elements = partition_pdf(filename=file_path)
+    else:
+        print("Unsupported file type")
+        return None
     
+    # Combining full text for classification 
     full_text = "\n".join([str(el) for el in elements])
     category = classify_document(full_text)
     
@@ -78,33 +99,11 @@ def parse_pdf(file_path, url_source=None):
                 pages[page_num] += " " + element.text  # Add space between chunks
     
     for page_num, text in pages.items():
+        # Detecting whether text is table or simple text
         text_type = "table" if detect_table_pattern(text) else "text"
-        text_data.append({"page_num": page_num, "content": text, "category": category, "text_type": text_type ,"url": url_source, "doc_type": "pdf"})
+        # Creatig text data for chunking
+        text_data.append({"page_num": page_num, "content": text, "category": category, "text_type": text_type ,"url": url_source, "doc_type": type_file})
 
-    return text_data
-
-# Helper function to extract text from PPTX files using python-pptx
-def parse_ppt(file_path, url_source=None, pptx=False):
-    text_data = []
-
-    if pptx:
-        elements = partition_pptx(filename=file_path)
-    else:
-        elements = partition_ppt(filename=file_path)
-
-    full_text = "\n".join([str(el) for el in elements])
-
-    # Extract text from all slides
-    category = classify_document(full_text)
-
-    # Extract text from each slide and store it in a structured format with page number, content, category, and source URL
-    for element in elements:
-        slide_num = element.metadata.page_number
-        slide_text = "\n".join([str(shape) for shape in element.shapes if hasattr(shape, "text")])
-        text_type = "table" if detect_table_pattern(slide_text) else "text"
-
-        text_data.append({"page_num": slide_num, "content": slide_text, "text_type": text_type ,"category": category, "url": url_source, "doc_type": "ppt"})
-    
     return text_data
 
 # Helper function to clean text by removing extra spaces and newlines
@@ -165,20 +164,16 @@ def classify_document(text):
             return category
     return "Unknown"
 
-def process_file(file_path, url_source=None):
-    
-    # Determine the file type based on extension
+# Determine the file type based on extension
+def get_doc_type(file_path):
     _, ext = os.path.splitext(file_path)
     ext = ext.lower()
     if ext == ".pdf":
         doc_type = "pdf" 
-        extracted_data = parse_pdf(file_path, url_source)
     elif ext == ".ppt":
         doc_type = "ppt"
-        extracted_data = parse_ppt(file_path, url_source, pptx=False)
     elif ext == ".pptx":
         doc_type = "pptx"
-        extracted_data = parse_ppt(file_path, url_source, pptx=True)
     else:
         doc_type = None
     
@@ -186,7 +181,11 @@ def process_file(file_path, url_source=None):
         print(f"Unsupported file type: {ext}")
         return None
     
+    return doc_type
 
+def process_file(file_path, url_source=None):
+    doc_type = get_doc_type(file_path)
+    extracted_data = parse_data(file_path, url_source, type_file=doc_type)
     return extracted_data
     
 def chunk_data(elements):
@@ -216,15 +215,24 @@ def chunk_data(elements):
     
     return final_data
 
-def main():
+def main(args=None):
 
     urls = [
        "https://view.officeapps.live.com/op/view.aspx?src=https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/SlidesFY25Q2",
        "https://digitalassets.tesla.com/tesla-contents/image/upload/IR/TSLA-Q4-2024-Update.pdf",
        "https://s2.q4cdn.com/470004039/files/doc_earnings/2025/q1/filing/10Q-Q1-2025-as-filed.pdf",
        "https://www.apple.com/newsroom/pdfs/fy2025-q1/FY25_Q1_Consolidated_Financial_Statements.pdf",
-       "https://s2.q4cdn.com/470004039/files/doc_financials/2021/q4/_10-K-2021-(As-Filed).pdf"
+       "https://s2.q4cdn.com/470004039/files/doc_financials/2021/q4/_10-K-2021-(As-Filed).pdf",
+       "https://www.apple.com/newsroom/pdfs/fy2024-q1/FY24_Q1_Consolidated_Financial_Statements.pdf",
+       "https://conferences.infotoday.com/documents/451/0930_Jain.pptx",
+       "https://conferences.infotoday.com/documents/451/B105_Steinkamp.pptx",
+       "https://conferences.infotoday.com/documents/451/AI105_Oad.pptx",
     ]
+
+    urls += args
+    if not urls:
+        print("No URLs provided. Please provide URLs as command line arguments.")
+        return
 
     # Fetch and download documents
     raw_files = fetch_documents(urls)
@@ -253,10 +261,7 @@ def main():
         persist_directory="chroma_db"
     )
 
-    # Save to disk
-    db.persist()
-
     print("Data processing and storage complete.")
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

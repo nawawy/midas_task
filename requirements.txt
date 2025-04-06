@@ -8,3 +8,5 @@ langchain-community
 langchain
 sentence_transformers
 accelerate
+langchain_huggingface
+langchain_chroma
