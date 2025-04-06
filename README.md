@@ -14,18 +14,27 @@ This repository contains a solution for an AI/ML Data Engineer role assignment, 
 ---
 
 ## Project Structure
-app/ 
-
- ├── pipeline.py # Main script for the data ingestion pipeline 
- ├── requirements.txt 
- Python dependencies 
-    ├── Dockerfile # Docker configuration for building the container 
-    ├── output/ # Directory for processed JSONL files 
-    ├── DOCUMENTATION.md # Project documentation 
-    ├── README.md # Project instructions and details 
-    ├── .gitignore # Files to ignore in GitHub commits
-
-
+```
+📦 
+├─ .gitignore
+├─ .vscode
+│  └─ launch.json
+├─ Documentation.md
+├─ README.md
+├─ dockerfile
+├─ downloads
+│  ├─ 10Q-Q1-2025-as-filed.pdf
+│  ├─ FY25_Q1_Consolidated_Financial_Statements.pdf
+│  ├─ SlidesFY25Q2
+│  ├─ TSLA-Q4-2024-Update.pdf
+│  └─ _10-K-2021-(As-Filed).pdf
+├─ output
+│  ├─ 5233be31-4868-44a4-b08a-b17a42c67582.jsonl
+│  ├─ 5f19a0b1-21d3-4cbd-8616-3a1590fd97c2.jsonl
+│  └─ 879955c3-4a2d-44ff-a3c8-12e8bbe38f46.jsonl
+├─ pipeline.py
+└─ requirements.txt
+```
 ---
 
 ## Setup Instructions
