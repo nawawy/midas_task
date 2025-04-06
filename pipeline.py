@@ -139,11 +139,38 @@ def save_to_json(data, output_file="output/output.json"):
 
 # Helper function to detect table-like patterns in text
 def detect_table_pattern(text):
-    # Check for common table patterns like pipes, commas, or multiple spaces
+    # Split the text into lines
     lines = text.strip().split("\n")
-    if len(lines) >= 2:
-        num_tabular_lines = sum(1 for line in lines if len(line.split()) >= 3 and "|" in line or line.count(" ") > 10)
-        return num_tabular_lines / len(lines) > 0.5
+
+    table_line_count = 0
+    columns_count = None
+
+    for line in lines:
+        # Split by pipe `|`, strip spaces to avoid leading/trailing whitespaces
+        parts = [part.strip() for part in line.split("|")]
+
+        # Condition 1: Check for a significant number of columns
+        if len(parts) >= 2:
+            # Check if there's at least one numeric value (indicating structured data)
+            has_numbers = any(re.search(r'\d+', part) for part in parts)
+            
+            # Skip lines that don't have numeric data or don't look like they belong in a table
+            if not has_numbers:
+                continue
+            
+            # Condition 2: Check column consistency
+            if columns_count is None:
+                columns_count = len(parts)
+            elif len(parts) != columns_count:
+                # If the number of columns changes from line to line, it's not a table
+                return False
+            
+            table_line_count += 1
+    
+    # If there are more than 50% table-like lines with consistent columns, classify as a table
+    if table_line_count / len(lines) > 0.5:
+        return True
+    
     return False
 
 # Helper function to load cache from a JSON file
@@ -289,7 +316,7 @@ def main(args=None):
     raw_files = fetch_documents(urls)
 
     # Process each file ad parse text
-    processed_data = [process_file(f[0],f[1]) for f in raw_files]
+    processed_data = [process_file(f[0],f[1]) for f in raw_files] # f[0] = file_path, f[1] = url
 
     # Chunk the processed data
     chunks = chunk_data(processed_data)
