@@ -12,31 +12,38 @@ This repository contains a solution for an AI/ML Data Engineer role assignment, 
 - [Usage](#usage)
 - [Pipeline Overview](#pipeline-overview)
 - [Documetation](#documentation)
+- [Testing](#testing)
 
 ---
 
 ## Project Structure
 ```
 📦 
-├─ .gitignore
-├─ .vscode
-│  └─ launch.json
-├─ Documentation.md
-├─ README.md
-├─ dockerfile
-├─ downloads
-│  ├─ 10Q-Q1-2025-as-filed.pdf
-│  ├─ FY25_Q1_Consolidated_Financial_Statements.pdf
-│  ├─ SlidesFY25Q2
-│  ├─ TSLA-Q4-2024-Update.pdf
-│  └─ _10-K-2021-(As-Filed).pdf
-├─ output
-│  ├─ 5233be31-4868-44a4-b08a-b17a42c67582.jsonl
-│  ├─ 5f19a0b1-21d3-4cbd-8616-3a1590fd97c2.jsonl
-│  └─ 879955c3-4a2d-44ff-a3c8-12e8bbe38f46.jsonl
-├─ pipeline.py
-└─ requirements.txt
+├─  .gitignore
+├─  .vscode
+├─  launch.json
+├─  Documentation.md
+├─  README.md
+├─  classifier.py
+├─  dockerfile
+├─  downloads
+├─────  10Q-Q1-2025-as-filed.pdf
+├─────  FY25_Q1_Consolidated_Financial_Statements.pdf
+├─  output
+├─────  5233be31-4868-44a4-b08a-b17a42c67582.jsonl
+├─────  5f19a0b1-21d3-4cbd-8616-3a1590fd97c2.jsonl
+├─  parse_data_utils.py
+├─  pipeline.py
+├─  requirements.txt
+├─  test
+├─────  __init__.py
+├─────  test_chunking.py
+├─────  test_classification.py
+├─────  test_parsing.py
+├─────  test_utils.py
+├─  utils.py
 ```
+
 ---
 
 ## Setup Instructions
@@ -72,13 +79,13 @@ Option 1: Virtual Environment
             
 Option 2: Docker
 
-        * Build the Docker image:
+            * Build the Docker image:
 
               cd midas_task
               docker build -t midas .
 ---
 
-### Usage
+## Usage
 #### Running the Pipeline
 ##### Option 1: Using Python
 
@@ -86,7 +93,7 @@ Option 2: Docker
   ```bash
 
   Put your openai API key in classifier.py line 4
-    openai.api_key = "your-openai-api-key"
+   * openai.api_key = "your-openai-api-key"
 
   python pipeline.py "https:/example.com/documents/file.pdf"
   ```
@@ -97,14 +104,13 @@ Option 2: Docker
 
   ```bash
     Put your openai API key in classifier.py line 4
-      openai.api_key = "your-openai-api-key"
+    * openai.api_key = "your-openai-api-key"
 
     docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://conferences.infotoday.com/documents/451/C204_Hedden.pdf"
   ```
 <br>
 
   Command Details:<br>
-    
     "--name my_midas": Names the container for reuse.<br>
     "-v $(pwd)/output:/app/output": Maps the container's output directory to your local output/ folder.<br>
     "midas": The name of the Docker image.<br>
@@ -117,7 +123,7 @@ Option 2: Docker
 
 ---
 
-### Pipeline Overview
+## Pipeline Overview
 #### The pipeline performs the following steps:
 
 1. Fetch Documents: Downloads PDFs or PPTs from provided URLs.
@@ -134,5 +140,24 @@ Option 2: Docker
 
 ---
 
-### Documentation
+## Documentation
 #### You can find a file named Documentation.md that contains all of the code documentation and explaination
+
+## Testing
+
+#### Running Tests with pytest:
+
+Install pytest (if not already installed):
+
+  ```bash
+  pip install pytest
+  ```
+  Run Tests: You can run your tests by simply executing the following command in your terminal
+
+  ```bash
+  pytest
+  ```
+By default, pytest will discover and run all test functions that start with test_ in any file that starts with test_ in the tests folder.
+
+
+
