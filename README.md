@@ -90,8 +90,7 @@ _____________________________
   ```bash
     docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
-<br><br>
-
+<br>
 
   This will run a container of your built image and then copies the output to your output folder to see it.<br><br>
   
