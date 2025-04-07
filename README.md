@@ -55,31 +55,27 @@ git clone https://github.com/nawawy/midas_task.git
 #### You can use virtual environment or Docker
   
             2. Create a virtual environment (optional, but recommended):
+                        
+              cd midas_task
+              python3 -m venv venv
+              source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
             
-            ```bash
             
-            cd midas_task
-            python3 -m venv venv
-            source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-            
-            ```
             3. Install dependencies:
-            ```bash
-            pip install -r requirements.txt
-            ```
+            
+              pip install -r requirements.txt
+            
 _____________________________
             2. Set up Docker (optional)
             If you prefer to run the application in a Docker container, follow these steps:
             
             Build the Docker image:
-            ```bash
-            cd midas_task
-            docker build -t midas_task .
-            ```
+            
+              cd midas_task
+              docker build -t midas_task .
+            
             Run the Docker container:
-            ```bash
-            docker run -it midas_task
-            ```
+              docker run -it midas_task
   
 ### Usage
 #### Running the Pipeline
