@@ -1,4 +1,4 @@
-# AI/ML Data Engineer Take-Home Assignment
+# Midas AI AI/ML Data Engineer Take-Home Assignment
 
 ## Overview
 This repository contains a solution for an AI/ML Data Engineer role assignment, aimed at building a data ingestion pipeline for processing investor relations documents (PDFs and PPTs). The objective is to fetch, parse, and transform unstructured data into semantic chunks suitable for a Retrieval-Augmented Generation (RAG) system.
@@ -73,7 +73,7 @@ Option 2: Docker
         * Build the Docker image:
 
               cd midas_task
-              docker build -t midas_task .
+              docker build -t midas .
 ---
 
 ### Usage
