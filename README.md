@@ -52,32 +52,33 @@ Ensure you have the following installed:
 ```bash
 git clone https://github.com/nawawy/midas_task.git
 ```
-#### You can use virtual environment or Docker
+#### Choose Your Setup Method:
+You can use either a virtual environment or Docker.
+
+Option 1: Virtual Environment
   
-            2. Create a virtual environment (optional, but recommended):
+            * Create a virtual environment (optional, but recommended):
                         
               cd midas_task
               python3 -m venv venv
               source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
             
             
-            3. Install dependencies:
+            * Install dependencies:
             
               pip install -r requirements.txt
             
-_____________________________
-            2. Set up Docker (optional)
-            If you prefer to run the application in a Docker container, follow these steps:
-            
-            Build the Docker image:
-            
+Option 2: Docker
+
+        * Build the Docker image:
+
               cd midas_task
               docker build -t midas_task .
 ---
 
 ### Usage
 #### Running the Pipeline
-##### Either this :
+##### Option 1: Using Python
 
 
   Run the script:
@@ -87,19 +88,18 @@ _____________________________
   The processed chunks will be saved as a JSONL file in the output/ directory.
 
   
-##### Or use docker after building the image:
+##### Option 2: Using Docker
   ```bash
     docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
 <br>
 
-  This will run a container of your built image and then copies the output to your output folder to see it.<br><br>
-  
-  Details : <br>
-    --name my_midas : is the container name in order to use it if you want to rerun the same container<br>
-    $(pwd)/output:/app/output : copies the output from the container to the local output folder to see the json files<br>
-    midas : is the ame of the image built<br>
-    "https://www.example.com/example.pdf" : pass any url you want to add for the pipeline to download and parse<br><br><br>
+  The output will be copied to your local output/ directory.<br>
+  Command Details:<br>
+    --name my_midas: Names the container for reuse.<br>
+    -v $(pwd)/output:/app/output: Maps the container's output directory to your local output/ folder.<br>
+    midas_task: The name of the Docker image.<br>
+    "https://www.example.com/example.pdf": The URL of the document to process.<br>
 
   ```bash
   docker start -a my_midas
