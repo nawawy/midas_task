@@ -60,7 +60,7 @@ This function writes the processed data (text chunks and associated metadata) to
 
 #### 10. `detect_table_pattern(text: str)`
 
-This function attempts to detect whether the provided text contains a table by analyzing the structure of the text. It looks for columns (indicated by the use of `|`), consistency in column counts, and the presence of numeric values to identify structured data.
+This function attempts to detect whether the provided text contains a table by analyzing the structure of the text. It looks for columns (indicated by the use of `|`), consistency in column counts to identify structured data.
 
 #### 11. `load_cache()` and `save_cache(cache: Dict[str, Dict])`
 
@@ -109,7 +109,7 @@ The script uses **NLTK** to chunk large text into smaller, manageable pieces. He
 
 NLTK’s **TextSplitter** is used to split the text based on a specified separator (double newlines in this case), helping break down the document into logical, readable parts.
 
-### Conclusion
+### Final Conclusion
 
 This code processes corporate documents (like reports and presentations) by:
 1. Downloading and parsing the files.
@@ -140,7 +140,7 @@ The use of **NLTK** for chunking helps maintain the context within each chunk, a
     - Implement adaptive chunk sizes based on document length or content type to optimize for document processing efficiency.
 
 # 5. **Error Handling and Retry Strategies**:
-    - Improve the error handling system to provide more robust responses to failures (e.g., network issues, file corruption, unsupported document types).
+    - Improve the error handling system to provide more robust responses to failures.
     - Expand the retry strategy to allow for exponential backoff, helping to manage rate limits when downloading large volumes of data from external sources.
 
 # 6. **Metadata Enhancement**:
@@ -151,14 +151,10 @@ The use of **NLTK** for chunking helps maintain the context within each chunk, a
     - Consider using a more advanced caching mechanism (e.g., a distributed cache or an in-memory database) for faster retrieval and processing of previously downloaded or processed files.
     - Implement versioning for cached files to ensure that documents are reprocessed only when necessary (e.g., after updates).
 
-# 8. **Parallel and Distributed Processing**:
-    - Introduce parallel processing or distributed computing frameworks (e.g., Dask, Ray) to handle large batches of documents concurrently, reducing processing time for large datasets.
-    - Allow for processing in a cloud-native way, using platforms like AWS Lambda or Google Cloud Functions, to scale the system dynamically based on the load.
-
-# 9. **Database Integration**:
+# 8. **Database Integration**:
     - Enhance the storage mechanism to support integration with databases (e.g., PostgreSQL, MongoDB) for efficient querying and analysis of the processed data.
     - Support indexing of documents to facilitate faster searches across large datasets.
 
-# 10. **User Interface (UI)**:
+# 9. **User Interface (UI)**:
     - Develop a user-friendly interface to allow users to interact with the tool more easily, manage files, and visualize processed data.
     - Consider adding support for drag-and-drop document uploads and providing real-time feedback on processing status.
