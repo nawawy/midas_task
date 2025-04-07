@@ -1,8 +1,7 @@
 import openai
 
 # Set OpenAI API key
-# openai.api_key = "your-openai-api-key"
-openai.api_key = "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"
+openai.api_key = "your-openai-api-key"
 
 # Predefined categories 
 CATEGORIES = {
