@@ -73,7 +73,8 @@ _____________________________
             
               cd midas_task
               docker build -t midas_task .
-  
+---
+
 ### Usage
 #### Running the Pipeline
 ##### Either this :
@@ -104,6 +105,8 @@ _____________________________
   docker start -a my_midas
   ```
   To run the same container again, if you want to check the avoiding processing existing files feature
+
+---
 
 ### Pipeline Overview
 #### The pipeline performs the following steps:
