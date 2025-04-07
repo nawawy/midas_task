@@ -17,6 +17,7 @@ This code is divided into the mainn python file "pipeline.py" and other python f
 
     parse_data_utils : have the function to parse the files into elements and then chunking them into small chunks.
 
+    processed_files.json : contains list of processed files in order not to process them again. 
 
 ## 2. Imports
 
