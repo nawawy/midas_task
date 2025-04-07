@@ -86,12 +86,13 @@ _____________________________
   ```bash
     docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
-  This will run a container of your built image and then copies the output to your output folder to see it.
-  Details : \n
-    --name my_midas : is the container name in order to use it if you want to rerun the same container
-    $(pwd)/output:/app/output : copies the output from the container to the local output folder to see the json files
-    midas : is the ame of the image built
-    "https://www.example.com/example.pdf" : pass any url you want to add for the pipeline to download and parse
+<br>
+  This will run a container of your built image and then copies the output to your output folder to see it.<br>
+  Details : <br>
+    --name my_midas : is the container name in order to use it if you want to rerun the same container<br>
+    $(pwd)/output:/app/output : copies the output from the container to the local output folder to see the json files<br>
+    midas : is the ame of the image built<br>
+    "https://www.example.com/example.pdf" : pass any url you want to add for the pipeline to download and parse<br>
 
   ```bash
   docker start -a my_midas
