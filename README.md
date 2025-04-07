@@ -100,7 +100,7 @@ _____________________________
   ```bash
   docker start -a my_midas
   ```
-  To run the same container again, if you wat to check the avoiding processing existing files feature
+  To run the same container again, if you want to check the avoiding processing existing files feature
 
 ### Pipeline Overview
 #### The pipeline performs the following steps:
