@@ -1,4 +1,4 @@
-# AI/ML Data Engineer Take-Home Assignment
+# Midas AI AI/ML Data Engineer Take-Home Assignment
 
 ## Overview
 This repository contains a solution for an AI/ML Data Engineer role assignment, aimed at building a data ingestion pipeline for processing investor relations documents (PDFs and PPTs). The objective is to fetch, parse, and transform unstructured data into semantic chunks suitable for a Retrieval-Augmented Generation (RAG) system.
@@ -11,6 +11,8 @@ This repository contains a solution for an AI/ML Data Engineer role assignment, 
 - [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Pipeline Overview](#pipeline-overview)
+- [Documetation](#documentation)
+
 ---
 
 ## Project Structure
@@ -73,7 +75,7 @@ Option 2: Docker
         * Build the Docker image:
 
               cd midas_task
-              docker build -t midas_task .
+              docker build -t midas .
 ---
 
 ### Usage
@@ -96,9 +98,9 @@ Option 2: Docker
 
   The output will be copied to your local output/ directory.<br>
   Command Details:<br>
-    --name my_midas: Names the container for reuse.<br>
-    -v $(pwd)/output:/app/output: Maps the container's output directory to your local output/ folder.<br>
-    midas_task: The name of the Docker image.<br>
+    "--name my_midas": Names the container for reuse.<br>
+    "-v $(pwd)/output:/app/output": Maps the container's output directory to your local output/ folder.<br>
+    "midas": The name of the Docker image.<br>
     "https://www.example.com/example.pdf": The URL of the document to process.<br>
 
   ```bash
@@ -122,3 +124,8 @@ Option 2: Docker
 5. Save Output: Stores the chunks in a JSONL file for further processing.
 
 6. Embeddings: Optionally stores the chunks in ChromaDB for efficient retrieval.
+
+---
+
+### Documentation
+#### You can find a file named Documentation.md that contains all of the code documentation and explaination
