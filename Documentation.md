@@ -67,7 +67,7 @@ This function accepts a list of URLs, checks if they have been processed before 
 
 #### 14. `classify_document(text: str)`
 
-The classification function checks the content of a document and classifies it into predefined categories based on keyword matching. This approach leverages the `CATEGORIES` dictionary to determine the appropriate category.
+The classification function checks the content of a document and classifies it into predefined categories based on using GPT for classification or keyword matching. This approach leverages the `CATEGORIES` dictionary to determine the appropriate category.
 
 #### 15. `get_doc_type(file_path: str)`
 
