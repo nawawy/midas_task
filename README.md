@@ -77,12 +77,16 @@ _____________________________
 ### Usage
 #### Running the Pipeline
 ##### Either this :
+
+
   Run the script:
   ```bash
   python pipeline.py "https:/example.com/documents/file.pdf"
   ```
   The processed chunks will be saved as a JSONL file in the output/ directory.
-#####Or use docker after building the image:
+
+  
+##### Or use docker after building the image:
   ```bash
     docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
