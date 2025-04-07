@@ -52,40 +52,48 @@ Ensure you have the following installed:
 ```bash
 git clone https://github.com/nawawy/midas_task.git
 ```
-2. Create a virtual environment (optional, but recommended):
+#### You can use virtual environment or Docker
+  
+  2. Create a virtual environment (optional, but recommended):
+  
+  ```bash
+  
+  cd midas_task
+  python3 -m venv venv
+  source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+  
+  ```
+  3. Install dependencies:
+  ```bash
+  pip install -r requirements.txt
+  ```
 
-```bash
-
-cd midas_task
-python3 -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-
-```
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Set up Docker (optional)
-If you prefer to run the application in a Docker container, follow these steps:
-
-Build the Docker image:
-```bash
-cd midas_task
-docker build -t midas_task .
-```
-Run the Docker container:
-```bash
-docker run -it midas_task
-```
-
+  2. Set up Docker (optional)
+  If you prefer to run the application in a Docker container, follow these steps:
+  
+  Build the Docker image:
+  ```bash
+  cd midas_task
+  docker build -t midas_task .
+  ```
+  Run the Docker container:
+  ```bash
+  docker run -it midas_task
+  ```
+  
 ### Usage
 #### Running the Pipeline
-Run the script:
-```bash
-python pipeline.py "https:/example.com/documents/file.pdf"
-```
-The processed chunks will be saved as a JSONL file in the output/ directory.
+##### Either this :
+  Run the script:
+  ```bash
+  python pipeline.py "https:/example.com/documents/file.pdf"
+  ```
+  The processed chunks will be saved as a JSONL file in the output/ directory.
+##### Or use docker after building the image:
+  ```bash
+    docker run -v $(pwd)/output:/app/output midas
+    ```
+  This will run a container of your built image and then copies the output to your output folder to see it.
 
 ### Pipeline Overview
 #### The pipeline performs the following steps:
