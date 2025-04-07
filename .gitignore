@@ -1,0 +1,44 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ChromaDB persistence directory
+chroma_db/
+chromadb/
+
+
+# Virtual environment
+venv/
+.env/
+.envrc
+
+# Python cache
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+
+# IDEs
+.vscode/
+.idea/
+
+# Mac/Linux/Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets (optional)
+apikeys.json
+config.yaml
+
+# NLTK data cache (optional)
+nltk_data/# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
