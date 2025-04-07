@@ -96,9 +96,9 @@ Option 2: Docker
 
   The output will be copied to your local output/ directory.<br>
   Command Details:<br>
-    --name my_midas: Names the container for reuse.<br>
-    -v $(pwd)/output:/app/output: Maps the container's output directory to your local output/ folder.<br>
-    midas_task: The name of the Docker image.<br>
+    "--name my_midas": Names the container for reuse.<br>
+    "-v $(pwd)/output:/app/output": Maps the container's output directory to your local output/ folder.<br>
+    "midas": The name of the Docker image.<br>
     "https://www.example.com/example.pdf": The URL of the document to process.<br>
 
   ```bash
