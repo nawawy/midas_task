@@ -90,7 +90,7 @@ Option 2: Docker
   
 ##### Option 2: Using Docker
   ```bash
-    docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
+    docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://www.example.com/example.pdf"
   ```
 <br>
 
