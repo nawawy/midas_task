@@ -84,7 +84,7 @@ This function determines the type of document (PDF, PowerPoint) based on its fil
 
 #### 16. `process_file(file_path: str, url_source: str)`
 
-This function processes each file by checking if it has already been parsed (using the cache). If not, it parses the document using `parse_data` and updates the cache to mark the file as processed.
+This function processes each file by checking if it has already been parsed (using the cache). If not, it parses the document using `parse_data` and produces list with data for each page or slide to get chunked later then updates the cache to mark the file as processed.
 
 #### 17. `chunk_data(elements: List[Dict[str, Union[int, str]]])`
 
@@ -94,7 +94,7 @@ This function chunks the content of the parsed documents into smaller text segme
 
 The `main` function orchestrates the entire workflow:
 1. Downloads documents from the provided URLs.
-2. Processes the files and extracts their content using `process_file`.
+2. Processes the files and extracts their content and divides pdf/ppt by pages/slides using `process_file`.
 3. Chunks the content using `chunk_data`.
 4. Saves the resulting chunks to a JSONL file.
 5. Converts the chunks into `Document` objects and creates embeddings using **HuggingFaceEmbeddings** (or `OpenAIEmbeddings` if preferred).
