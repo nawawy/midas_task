@@ -109,3 +109,47 @@ This code processes corporate documents (like reports and presentations) by:
 4. Saving the results to a storage medium (e.g., JSONL file or ChromaDB).
 
 The use of **NLTK** for chunking helps maintain the context within each chunk, and the use of embeddings and ChromaDB aids in efficient searching and semantic analysis of the content.
+
+
+# Future Improvements:
+
+
+# 1. **Enhanced Document Classification**:
+    - Implement machine learning models for more accurate and dynamic document classification based on content. This could be achieved by training classifiers on labeled datasets and replacing the current rule-based classification system.
+    - Add support for multi-class classification to improve the precision of category assignments.
+
+# 2. **Table Extraction and Analysis**:
+    - Improve the `detect_table_pattern` function to handle more complex table structures, including nested tables and tables with dynamic row/column patterns.
+    - Allow extraction of table data into structured formats like CSV, Excel, or database entries for easier analysis and reporting.
+
+# 3. **Support for Additional File Formats**:
+    - Extend support to handle other file formats like DOCX, XLSX, or HTML documents.
+    - Investigate integration with cloud-based APIs (e.g., Google Docs API) to fetch and process documents from online sources.
+
+# 4. **Optimized Text Chunking**:
+    - Use more sophisticated NLP models for text chunking, such as transformer-based models, to better understand content context and break text into meaningful chunks.
+    - Implement adaptive chunk sizes based on document length or content type to optimize for document processing efficiency.
+
+# 5. **Error Handling and Retry Strategies**:
+    - Improve the error handling system to provide more robust responses to failures (e.g., network issues, file corruption, unsupported document types).
+    - Expand the retry strategy to allow for exponential backoff, helping to manage rate limits when downloading large volumes of data from external sources.
+
+# 6. **Metadata Enhancement**:
+    - Enrich document metadata with additional details, such as the document's author, creation date, and version.
+    - Introduce more advanced document parsing techniques to extract and include richer metadata, like keywords, entities, or sentiment scores.
+
+# 7. **Improved Caching Mechanism**:
+    - Consider using a more advanced caching mechanism (e.g., a distributed cache or an in-memory database) for faster retrieval and processing of previously downloaded or processed files.
+    - Implement versioning for cached files to ensure that documents are reprocessed only when necessary (e.g., after updates).
+
+# 8. **Parallel and Distributed Processing**:
+    - Introduce parallel processing or distributed computing frameworks (e.g., Dask, Ray) to handle large batches of documents concurrently, reducing processing time for large datasets.
+    - Allow for processing in a cloud-native way, using platforms like AWS Lambda or Google Cloud Functions, to scale the system dynamically based on the load.
+
+# 9. **Database Integration**:
+    - Enhance the storage mechanism to support integration with databases (e.g., PostgreSQL, MongoDB) for efficient querying and analysis of the processed data.
+    - Support indexing of documents to facilitate faster searches across large datasets.
+
+# 10. **User Interface (UI)**:
+    - Develop a user-friendly interface to allow users to interact with the tool more easily, manage files, and visualize processed data.
+    - Consider adding support for drag-and-drop document uploads and providing real-time feedback on processing status.
