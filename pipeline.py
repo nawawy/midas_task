@@ -45,8 +45,8 @@ nltk.download('averaged_perceptron_tagger_eng')
 set_verbose(False)
 set_debug(False)
 
-# Remove existing ChromaDB directory if it exists
-shutil.rmtree("chroma_db", ignore_errors=True)
+# Remove existing ChromaDB directory if it exists to avoid conflicts
+# shutil.rmtree("chroma_db", ignore_errors=True)
 
 # Set the cache file name
 CACHE_FILE = "processed_files.json"
