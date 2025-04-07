@@ -11,6 +11,8 @@ This repository contains a solution for an AI/ML Data Engineer role assignment, 
 - [Setup Instructions](#setup-instructions)
 - [Usage](#usage)
 - [Pipeline Overview](#pipeline-overview)
+- [Documetation](#documentation)
+
 ---
 
 ## Project Structure
@@ -122,3 +124,8 @@ Option 2: Docker
 5. Save Output: Stores the chunks in a JSONL file for further processing.
 
 6. Embeddings: Optionally stores the chunks in ChromaDB for efficient retrieval.
+
+---
+
+### Documentation
+#### You can find a file named Documentation.md that contains all of the code documentation and explaination
