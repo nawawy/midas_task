@@ -82,22 +82,29 @@ Option 2: Docker
 #### Running the Pipeline
 ##### Option 1: Using Python
 
-
   Run the script:
   ```bash
+
+  Put your openai API key in classifier.py line 4
+    openai.api_key = "your-openai-api-key"
+
   python pipeline.py "https:/example.com/documents/file.pdf"
   ```
   The processed chunks will be saved as a JSONL file in the output/ directory.
 
   
 ##### Option 2: Using Docker
+
   ```bash
+    Put your openai API key in classifier.py line 4
+      openai.api_key = "your-openai-api-key"
+
     docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://www.example.com/example.pdf"
   ```
 <br>
 
-  The output will be copied to your local output/ directory.<br>
   Command Details:<br>
+    
     "--name my_midas": Names the container for reuse.<br>
     "-v $(pwd)/output:/app/output": Maps the container's output directory to your local output/ folder.<br>
     "midas": The name of the Docker image.<br>
