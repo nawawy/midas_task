@@ -87,7 +87,7 @@ _____________________________
     docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
   This will run a container of your built image and then copies the output to your output folder to see it.
-  Details:
+  Details : \n
     --name my_midas : is the container name in order to use it if you want to rerun the same container
     $(pwd)/output:/app/output : copies the output from the container to the local output folder to see the json files
     midas : is the ame of the image built
