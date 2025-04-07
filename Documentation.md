@@ -6,9 +6,17 @@ This repository contains a solution for an AI/ML Data Engineer role assignment, 
 ---
 
 # Documentation
-## 1. Predefined Categories (`CATEGORIES`)
 
-This dictionary holds predefined categories used to classify the documents based on specific keywords. Each category has a list of keywords that help to identify the document type. These categories are primarily related to corporate documents like "Financial Reports", "Press Releases", and "Investor Presentations".
+## 1. Code Structure
+
+This code is divided into the mainn python file "pipeline.py" and other python files containing helper fuctions like:
+    
+    classifier.py : uses opennai to classify documents into categories ad if it fails it uses keyword matching.
+    
+    utils.py : contains all helper functions like downloading file, hashing, saving json, detecting whether text is table or simple text, caching parsed files and getting document type like pdf or ppt.
+
+    parse_data_utils : have the function to parse the files into elements and then chunking them into small chunks.
+
 
 ## 2. Imports
 
