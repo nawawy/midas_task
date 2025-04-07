@@ -73,9 +73,6 @@ _____________________________
             
               cd midas_task
               docker build -t midas_task .
-            
-            Run the Docker container:
-              docker run -it midas_task
   
 ### Usage
 #### Running the Pipeline
@@ -87,9 +84,19 @@ _____________________________
   The processed chunks will be saved as a JSONL file in the output/ directory.
 #####Or use docker after building the image:
   ```bash
-    docker run -v $(pwd)/output:/app/output midas
+    docker run --name my_midas -v $(pwd)/output:/app/output midas "https://www.example.com/example.pdf"
   ```
   This will run a container of your built image and then copies the output to your output folder to see it.
+  Details:
+    --name my_midas : is the container name in order to use it if you want to rerun the same container
+    $(pwd)/output:/app/output : copies the output from the container to the local output folder to see the json files
+    midas : is the ame of the image built
+    "https://www.example.com/example.pdf" : pass any url you want to add for the pipeline to download and parse
+
+  ```bash
+  docker start -a my_midas
+  ```
+  To run the same container again, if you wat to check the avoiding processing existing files feature
 
 ### Pipeline Overview
 #### The pipeline performs the following steps:
