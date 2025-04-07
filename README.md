@@ -99,7 +99,7 @@ Option 2: Docker
     Put your openai API key in classifier.py line 4
       openai.api_key = "your-openai-api-key"
 
-    docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://www.example.com/example.pdf"
+    docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://conferences.infotoday.com/documents/451/C204_Hedden.pdf"
   ```
 <br>
 
