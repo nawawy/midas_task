@@ -11,4 +11,4 @@ accelerate
 langchain_huggingface
 langchain_chroma
 pytest
-openai
+openai==0.28.0
