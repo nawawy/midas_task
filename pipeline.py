@@ -14,6 +14,7 @@ import requests
 import re
 import sys
 from tenacity import retry, stop_after_attempt, wait_fixed, RetryError
+from typing import List, Dict, Optional, Union
 
 from unstructured.partition.pdf import partition_pdf
 from unstructured.partition.ppt import partition_ppt
@@ -52,8 +53,7 @@ CACHE_FILE = "processed_files.json"
 
 # Helper function to download files from URLs and save them to a specified directory
 @retry(stop=stop_after_attempt(5), wait=wait_fixed(2))  # Retry 5 times with 2 seconds wait
-def download_file(url, save_dir="downloads"):
-    
+def download_file(url: str, save_dir: str = "downloads") -> str: 
     # Make sure the directory exists
     os.makedirs(save_dir, exist_ok=True)
     # Extract the filename from the URL and create the full path
@@ -71,10 +71,10 @@ def download_file(url, save_dir="downloads"):
         return filename
     except requests.RequestException as e:
         print(f"Failed to download {url}: {e}")
-        return None
+        raise e  # Raise the exception to trigger retry
 
 # Helper function to extract text from PDF files
-def parse_data(file_path, url_source=None, type_file=None):
+def parse_data(file_path: str, url_source: Optional[str] = None, type_file: Optional[str] = None) -> Optional[List[Dict[str, Union[int, str]]]]:
     text_data = []
     
     if type_file == "pptx":
@@ -111,34 +111,34 @@ def parse_data(file_path, url_source=None, type_file=None):
     return text_data
 
 # Helper function to clean text by removing extra spaces and newlines
-def clean_text(text):
+def clean_text(text: str) -> str:
     # Normalize multiple newlines and spaces
     text = re.sub(r'\s{2,}', ' ', text)
     text = text.strip()
     return text
 
 # Helper function to mark sections in the text
-def mark_sections(text):
+def mark_sections(text: str) -> str:
     # Insert double newlines before all-caps or heading-like lines
     text = re.sub(r"(?<!\n)\n(?=[A-Z][^\n]{2,50}\n)", r"\n\n", text)
     return text
 
 # Helper function to chunk text into smaller segments
-def chunk_text(text, chunk_size=1000, overlap=100):
+def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 100) -> List[str]:
     splitter = NLTKTextSplitter(chunk_size=chunk_size, chunk_overlap=overlap, separator="\n\n")
     clean_text_out = mark_sections(text)
     clean_text_out = clean_text(clean_text_out)
     return splitter.split_text(clean_text_out)
 
 # Helper function to save data to a JSONL file
-def save_to_json(data, output_file="output/output.json"):
+def save_to_json(data: List[Dict], output_file: str = "output/output.json") -> None:
     os.makedirs("output", exist_ok=True)
     with open(output_file, "w") as f:
         for entry in data:
             f.write(json.dumps(entry) + "\n")
 
 # Helper function to detect table-like patterns in text
-def detect_table_pattern(text):
+def detect_table_pattern(text : str) -> bool:
     # Split the text into lines
     lines = text.strip().split("\n")
 
@@ -174,22 +174,22 @@ def detect_table_pattern(text):
     return False
 
 # Helper function to load cache from a JSON file
-def load_cache():
+def load_cache() -> Dict[str, Dict]:
     if os.path.exists(CACHE_FILE):
         with open(CACHE_FILE, "r") as f:
             return json.load(f)
     return {}
 
 # Helper fuction to hash URLs
-def hash_url(url):
+def hash_url(url: str) -> str:
     return hashlib.md5(url.encode()).hexdigest()
 
 # Helper function to save cache to a JSON file
-def save_cache(cache):
+def save_cache(cache : Dict[str, Dict]) -> None:
     with open(CACHE_FILE, "w") as f:
         json.dump(cache, f, indent=2)
 
-def fetch_documents(urls):
+def fetch_documents(urls : List[str]) -> List[tuple[str, str]]:
     files = []
     cache = load_cache()
 
@@ -218,7 +218,7 @@ def fetch_documents(urls):
 
     return files
 
-def classify_document(text):
+def classify_document(text : str) -> str:
     # Rule-based classification using keyword matching
     for category, keywords in CATEGORIES.items():
         if any(keyword.lower() in text.lower() for keyword in keywords):
@@ -226,7 +226,7 @@ def classify_document(text):
     return "Unknown"
 
 # Determine the file type based on extension
-def get_doc_type(file_path):
+def get_doc_type(file_path: str) -> Optional[str]:
     _, ext = os.path.splitext(file_path)
     ext = ext.lower()
     if ext == ".pdf":
@@ -244,7 +244,7 @@ def get_doc_type(file_path):
     
     return doc_type
 
-def process_file(file_path, url_source):
+def process_file(file_path: str, url_source: str) -> Optional[List[Dict[str, Union[int, str]]]]:
     
     url_hash = hash_url(url_source)
     cache = load_cache()
@@ -266,7 +266,7 @@ def process_file(file_path, url_source):
     save_cache(cache)
     return extracted_data
     
-def chunk_data(elements):
+def chunk_data(elements: List[Dict[str, Union[int, str]]]) -> Optional[List[Dict[str, Union[str, int]]]]:
     # Implement semantic chunking logic
     final_data = []
 
