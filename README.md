@@ -80,8 +80,11 @@ Option 1: Virtual Environment
 Option 2: Docker
 
             * Build the Docker image:
+              Put your openai API key in classifier.py line 4
+              * openai.api_key = "your-openai-api-key"
 
               cd midas_task
+
               docker build -t midas .
 ---
 
@@ -103,8 +106,6 @@ Option 2: Docker
 ##### Option 2: Using Docker
 
   ```bash
-    Put your openai API key in classifier.py line 4
-    * openai.api_key = "your-openai-api-key"
 
     docker run --name my_midas -v $(pwd)/output:/app/output midas python pipeline.py "https://conferences.infotoday.com/documents/451/C204_Hedden.pdf"
   ```
